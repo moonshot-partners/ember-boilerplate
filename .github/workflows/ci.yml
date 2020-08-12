@@ -28,7 +28,7 @@ jobs:
 
   deploy-staging:
     needs: buildAndTests
-    if: github.ref == 'refs/heads/qa'
+    if: github.ref == 'refs/heads/branch_name'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -71,7 +71,7 @@ jobs:
 
   deploy-production:
     needs: buildAndTests
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/branch_name'
     runs-on: ubuntu-latest
     strategy:
       matrix:
