@@ -33,7 +33,8 @@ module.exports = {
     'generator-star-spacing': ['error', { 'before': true, 'after': false }],
     'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
     'ember-suave/no-const-outside-module-scope': 'off',
-    'ember-suave/lines-between-object-properties': 'off'
+    'ember-suave/lines-between-object-properties': 'off',
+    'ember-suave/require-access-in-comments': 'off'
   },
   overrides: [
     // node files

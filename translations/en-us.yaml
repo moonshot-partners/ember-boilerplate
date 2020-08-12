@@ -1,0 +1,6 @@
+commons:
+  welcome: Welcome
+components:
+  welcome:
+    title: Welcome to ember moonshot boilerplate
+    subtitle: It's a base project that moonshot partners use to start any ember app.
