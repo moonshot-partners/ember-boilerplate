@@ -21,6 +21,18 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+    },
+
+    fastboot: {
+      hostWhitelist: [/^localhost:\d+$/, process.env.APP_HOST].filter((env) => env)
+    },
+
+    backendApiHost: process.env.BACKEND_API_HOST,
+
+    historySupportMiddleware: true,
+
+    debounce: {
+      default: 500
     }
   };
 
@@ -42,10 +54,20 @@ module.exports = function(environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
+
+    ENV.backendApiHost = 'http://moonshot-example.com';
+
+    ENV.debounce = {
+      default: 0
+    };
   }
 
   if (environment === 'production') {
-    // here you can enable a production-specific feature
+    ENV.sentry = {
+      dsn: process.env.APP_SENTRY_DSN,
+      environment: process.env.APP_ENV,
+      release: process.env.APP_RELEASE_VERSION
+    };
   }
 
   return ENV;

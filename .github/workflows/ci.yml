@@ -1,0 +1,112 @@
+name: Node.js CI
+
+on: [push]
+
+jobs:
+  buildAndTests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: tests Node ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+    - run: yarn
+    - run: yarn test
+      env:
+        CI: true
+
+  deploy-staging:
+    needs: buildAndTests
+    if: github.ref == 'refs/heads/qa'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: tests Node ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+
+    - name: Version Check
+      id: check
+      uses: EndBug/version-check@v1.5.0
+      with:
+        diff-search: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - run: yarn
+    - run: yarn deploy
+      env:
+        PEARSON_AWS_KEY_ID: ${{ secrets.PEARSON_AWS_KEY_ID }}
+        PEARSON_AWS_KEY_SECRET: ${{ secrets.PEARSON_AWS_KEY_SECRET }}
+        PEARSON_AWS_S3_BUCKET: ${{ secrets.PEARSON_AWS_S3_BUCKET }}
+        PEARSON_AWS_S3_REGION: ${{ secrets.PEARSON_AWS_S3_REGION }}
+        PEARSON_APP_HOST: ${{ secrets.PEARSON_APP_HOST }}
+        SERVER_TOKEN_ENDPOINT: ${{ secrets.SERVER_TOKEN_ENDPOINT }}
+        BACKEND_HOST: ${{ secrets.BACKEND_HOST }}
+        GO1_PORTAL_URL: ${{ secrets.GO1_PORTAL_URL }}
+        PEARSON_APP_ENV: ${{ secrets.PEARSON_APP_ENV }}
+        PEARSON_APP_RELEASE_VERSION: ${{ steps.check.outputs.version }}
+        PEARSON_APP_SENTRY_DSN: ${{ secrets.PEARSON_APP_SENTRY_DSN }}
+        CI: true
+
+  deploy-production:
+    needs: buildAndTests
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: tests Node ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+
+    - name: Version Check
+      uses: EndBug/version-check@v1.5.0
+      with:
+        diff-search: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - run: yarn
+    - run: yarn deploy
+      env:
+        PEARSON_AWS_KEY_ID: ${{ secrets.PEARSON_AWS_KEY_ID }}
+        PEARSON_AWS_KEY_SECRET: ${{ secrets.PEARSON_AWS_KEY_SECRET }}
+        PEARSON_AWS_S3_BUCKET: ${{ secrets.PEARSON_AWS_S3_BUCKET_PRODUCTION }}
+        PEARSON_AWS_S3_REGION: ${{ secrets.PEARSON_AWS_S3_REGION }}
+        PEARSON_APP_HOST: ${{ secrets.PEARSON_APP_HOST_PRODUCTION }}
+        SERVER_TOKEN_ENDPOINT: ${{ secrets.SERVER_TOKEN_ENDPOINT }}
+        BACKEND_HOST: ${{ secrets.BACKEND_HOST }}
+        GO1_PORTAL_URL: ${{ secrets.GO1_PORTAL_URL }}
+        PEARSON_APP_ENV: ${{ secrets.PEARSON_APP_ENV_PRODUCTION }}
+        PEARSON_APP_RELEASE_VERSION: ${{ steps.check.outputs.version }}
+        PEARSON_APP_SENTRY_DSN: ${{ secrets.PEARSON_APP_SENTRY_DSN }}
+        CI: true
