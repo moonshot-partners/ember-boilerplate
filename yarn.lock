@@ -2796,7 +2796,7 @@ bn.js@^5.1.1:
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.1.2.tgz#c9686902d3c9a27729f43ab10f9d79c2004da7b0"
   integrity sha512-40rZaf3bUNKTVYu9sIeeEGOg7g14Yvnj9kH7b50EiwX0Q7A6umbvfI5tvHaOERH0XigqKkfLkFQxzb4e6CIXnA==
 
-body-parser@1.19.0:
+body-parser@1.19.0, body-parser@^1.17.0:
   version "1.19.0"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.19.0.tgz#96b2709e57c9c4e09a6fd66a8fd979844f69f08a"
   integrity sha512-dhEPs72UPbDnAQJ9ZKMNTP6ptJaionhP5cBb541nXPlW60Jepo9RV/a4fX4XWW9CuFNK22krhrj1+rgzifNCsw==
@@ -4821,6 +4821,14 @@ ember-cli-babel@^7.1.0, ember-cli-babel@^7.1.2, ember-cli-babel@^7.11.0, ember-c
     fixturify-project "^1.10.0"
     rimraf "^3.0.1"
     semver "^5.5.0"
+
+ember-cli-content-security-policy@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ember-cli-content-security-policy/-/ember-cli-content-security-policy-1.1.1.tgz#7d91a695319d8f99c317f3a594fba77bbfedf6c7"
+  integrity sha512-QgGAFt1nmsb0qF2YXI5iSM7jJVb09R2hrfX7uR+kkXMb5VyNQXdo2ZlX/DuIbePQVY4q9THpRh8Yf0UHJNbvDQ==
+  dependencies:
+    body-parser "^1.17.0"
+    chalk "^2.0.0"
 
 ember-cli-dependency-checker@^3.2.0:
   version "3.2.0"
