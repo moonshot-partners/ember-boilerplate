@@ -10,6 +10,6 @@ module('Integration | Component | pages/welcome', function(hooks) {
   test('it renders', async function(assert) {
     await render(hbs`<Pages::Welcome />`);
 
-    assert.equal(WelcomePage.title, 'Welcome');
+    assert.equal(WelcomePage.title, 'Welcome', 'shows correct title');
   });
 });

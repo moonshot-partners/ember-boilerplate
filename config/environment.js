@@ -27,6 +27,10 @@ module.exports = function(environment) {
       hostWhitelist: [/^localhost:\d+$/, process.env.APP_HOST].filter((env) => env)
     },
 
+    'ember-cli-head': {
+      suppressBrowserRender: true
+    },
+
     backendApiHost: process.env.BACKEND_API_HOST,
 
     historySupportMiddleware: true,
