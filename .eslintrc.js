@@ -1,26 +1,40 @@
-'use strict';
-
 module.exports = {
   root: true,
   parser: 'babel-eslint',
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'module',
-    ecmaFeatures: {
-      legacyDecorators: true
-    }
+    sourceType: 'module'
   },
   plugins: [
-    'ember'
+    'ember',
+    'ember-suave'
   ],
   extends: [
     'eslint:recommended',
-    'plugin:ember/recommended'
+    'plugin:ember/recommended',
+    'plugin:ember-suave/recommended'
   ],
   env: {
-    browser: true
+    browser: true,
+    node: true
   },
-  rules: {},
+  rules: {
+    // Please keep this options alphabetically sorted, plugins at the end.
+    'brace-style': ['error', '1tbs', { allowSingleLine: true }],
+    'key-spacing': ['error', {
+      singleLine: {},
+      multiLine: { mode: 'minimum' }
+    }],
+    'prefer-const': 2,
+    'max-len': ['error', 100, 2, {
+      'ignoreUrls': true,
+      'ignoreComments': true
+    }],
+    'generator-star-spacing': ['error', { 'before': true, 'after': false }],
+    'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
+    'ember-suave/no-const-outside-module-scope': 'off',
+    'ember-suave/lines-between-object-properties': 'off'
+  },
   overrides: [
     // node files
     {
@@ -35,18 +49,16 @@ module.exports = {
         'server/**/*.js'
       ],
       parserOptions: {
-        sourceType: 'script'
+        sourceType: 'script',
+        allowImportExportEverywhere: true
       },
       env: {
         browser: false,
         node: true
       },
       plugins: ['node'],
-      extends: ['plugin:node/recommended'],
       rules: {
-        // this can be removed once the following is fixed
-        // https://github.com/mysticatea/eslint-plugin-node/issues/77
-        'node/no-unpublished-require': 'off'
+        camelcase: 'off'
       }
     }
   ]
