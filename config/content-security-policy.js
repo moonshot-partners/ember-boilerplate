@@ -1,8 +1,9 @@
 // config/content-security-policy.js
 
-module.exports = function() {
+module.exports = function(env) {
   return {
-    delivery: ['meta'],
+    delivery: ['header'],
+    enabled: env !== 'test',
     policy: {
       // Deny everything by default
       'default-src': ["'none'"],
